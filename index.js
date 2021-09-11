@@ -11,6 +11,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+
 });
 client.connect((err) => {
   const usersCollection = client.db("user").collection("users");
@@ -21,19 +22,14 @@ app.post("/addUser", (req, res) => {
     usersCollection.insertOne(newUser).then((result) => {
       res.send(result.insertCount > 0);
     });
-  });
+  }); 
+ 
   app.get("/users", (req, res) => {
     usersCollection.find({}).toArray((err, documents) => {
       res.send(documents);
     });
   });
-  app.get("/users/:id", (req, res) => {
-    const id = ObjectID(req.params.id);
-    usersCollection.find({ _id: id }).toArray((err, result) => {
-        res.send(result[0]);
-        // console.log(res)
-    });
-});
+ 
   app.delete("/deleteUser/:id", (req, res) => {
     const id = ObjectID(req.params.id);
     usersCollection.deleteOne({ _id: id }).then((result) => {
@@ -64,7 +60,8 @@ app.post("/addUser", (req, res) => {
       .then((result) => {
         res.send(result.modifiedCount > 0);
       });
-  });
+  }); 
+ 
 });
 
 app.get("/", (req, res) => {
